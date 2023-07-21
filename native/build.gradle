@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply from: "$rootProject.projectDir/publishing.gradle"
 
 def mkfile = ''
 def aarname = ''
@@ -46,7 +45,7 @@ android {
         versionName versions.get("versionName")
 
         ndk {
-            abiFilters 'armeabi-v7a', 'x86', 'x86_64', 'arm64-v8a'
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -67,7 +66,7 @@ android {
     }
 
     sourceSets.main {
-        jni.srcDirs = [] // This prevents the auto generation of Android.mk, disables automatic ndk-build
+        jni.srcDirs = ['src/main/jni'] // This prevents the auto generation of Android.mk, disables automatic ndk-build
         jniLibs.srcDir 'src/main/libs' // This is not necessary unless you have precompiled libraries in your project.
     }
 
@@ -83,11 +82,12 @@ android {
         def ndkDir = properties.getProperty('ndk.dir')
         // def ndkDir = android.ndkDirectory
         println mkfile
-        commandLine "$ndkDir/ndk-build",
+        commandLine "$ndkDir/ndk-build.cmd",
                 mkfile,
                 'NDK_LIBS_OUT=../jniLibs', // Output .so files to jniLibs
                 '-C', file('src/main/jni').absolutePath, // Change src/main/jni the relative path to your jni source
                 '-j', Runtime.runtime.availableProcessors(),
+                'all',
                 'all',
                 'NDK_DEBUG=1'
     }
@@ -101,7 +101,7 @@ android {
         properties.load(project.rootProject.file('local.properties').newDataInputStream())
         def ndkDir = properties.getProperty('ndk.dir')
         // def ndkDir = android.ndkDirectory
-        commandLine "$ndkDir/ndk-build",
+        commandLine "$ndkDir/ndk-build.cmd",
                 '-C', file('src/main/jni').absolutePath, // Change src/main/jni the relative path to your jni source
                 'clean'
     }
@@ -125,45 +125,6 @@ println "$mkfile"
 println "$aarname"
 println "$pomName"
 println "$pomArtifactId"
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-
-                groupId = 'com.github.wseemann'
-                artifactId = "$pomArtifactId"
-                version = "$project.android.defaultConfig.versionName"
-
-                pom {
-                    name = "$pomName"
-                    description = 'FFmpegMediaPlayer library'
-                    url = 'https://github.com/wseemann/FFmpegMediaPlayer'
-                    packaging = 'aar'
-                    licenses {
-                        license {
-                            name = 'Apache License, Version 2.0'
-                            url = 'http://www.apache.org/licenses/LICENSE-2.0'
-                            distribution = 'repo'
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = 'wseemann'
-                            name = 'William Seemann'
-                        }
-                    }
-                    scm {
-                        connection = 'scm:hg:https://github.com/wseemann/FFmpegMediaPlayer'
-                        developerConnection = 'scm:hg:https://github.com/wseemann/FFmpegMediaPlayer'
-                        url = 'https://github.com/wseemann/FFmpegMediaPlayer'
-                    }
-                }
-            }
-        }
-    }
-}
 
 dependencies {
     testImplementation 'junit:junit:4.13.2'

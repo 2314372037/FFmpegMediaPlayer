@@ -533,15 +533,15 @@ public class FFmpegMediaPlayer
     private final static String TAG = "FFmpegMediaPlayer";
     
 	private static final String [] JNI_LIBRARIES = {
-            "crypto",
-            "ssl",
-            "SDL2",
-            "avutil",
-            "swscale",
-            "swresample",
-            "avcodec",
-            "avformat",
-            "ffmpeg_mediaplayer_jni"
+            "crypto2314",
+            "ssl2314",
+            "SDL22314",
+            "avutil2314",
+            "swscale2314",
+            "swresample2314",
+            "avcodec2314",
+            "avformat2314",
+            "ffmpeg_mediaplayer_jni2314"
 	};
     
     static {

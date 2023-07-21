@@ -18,5 +18,4 @@ pluginManagement {
 }*/
 
 include ':native'
-include ':fmp-demo'
 include ':core'

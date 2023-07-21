@@ -4,14 +4,6 @@ ifeq ($(TARGET_ARCH),arm)
     APP_PLATFORM=16
 endif
 
-ifeq ($(TARGET_ARCH),x86)
-    APP_PLATFORM=16
-endif
-
-ifeq ($(TARGET_ARCH),x86_64)
-    APP_PLATFORM=21
-endif
-
 ifeq ($(TARGET_ARCH),arm64-v8a)
     APP_PLATFORM=21
 endif

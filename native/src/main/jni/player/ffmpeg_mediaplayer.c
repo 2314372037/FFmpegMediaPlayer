@@ -395,7 +395,7 @@ static void schedule_refresh(VideoState *is, int delay) {
 }
 
 void video_display(VideoState *is) {
-
+    fprintf(stderr, "video_display invoke!!!!\n");
   SDL_Rect rect;
   VideoPicture *vp;
   //AVPicture pict;
